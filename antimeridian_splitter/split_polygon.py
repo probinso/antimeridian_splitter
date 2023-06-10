@@ -115,9 +115,19 @@ def split_polygon(geojson: dict, output_format: OutputFormat = OutputFormat.Geoj
     """
     geotype = AcceptedGeojsonTypes(geojson['type'])
     if geotype is AcceptedGeojsonTypes.Polygon:
+<<<<<<< HEAD
         split_polygons = [split_coords(geojson['coordinates'])]
     elif geotype is AcceptedGeojsonTypes.MultiPolygon:
         split_polygons = (split_coords(coords) for coords in geojson['coordinates'])
         
     gc = reduce(GeometryCollection.union, split_polygons, GeometryCollection())
     return translate_polygons(gc, output_format)
+=======
+        split_polygons = split_coords(geojson['coordinates'])
+    elif geotype is AcceptedGeojsonTypes.MultiPolygon:
+        split_polygons = reduce(
+            GeometryCollection.union,
+            (split_coords(coords) for coords in geojson['coordinates'])
+        )
+    return translate_polygons(split_polygons, output_format)
+>>>>>>> upstream/main
