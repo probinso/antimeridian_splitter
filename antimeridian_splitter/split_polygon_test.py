@@ -3,7 +3,11 @@ from .geopolygon_utils import OutputFormat
 import json
 from functools import reduce
 from shapely.geometry.base import BaseGeometry
-import shapely.geometry
+from shapely.geometry.collection import GeometryCollection
+from shapely.geometry import shape
+from shapely import wkt
+import shapely
+
 
 example_polygon1 = """
 {
@@ -18,8 +22,9 @@ example_polygon1 = """
 
 def test_split_polygon_to_geometrycollection():
     poly: dict = json.loads(example_polygon1)
-    res = split_polygon(poly, OutputFormat.GeometryCollection)
-    assert str(res) == 'GEOMETRYCOLLECTION (POLYGON ((180 0, 179 0, 179 1, 180 1, 180 0)), POLYGON ((-180 1, -179 1, -179 0, -180 0, -180 1)))'
+    dst: GeometryCollection  = split_polygon(poly, OutputFormat.GeometryCollection)
+    cmp = wkt.loads('GEOMETRYCOLLECTION (POLYGON ((180 0, 179 0, 179 1, 180 1, 180 0)), POLYGON ((-180 1, -179 1, -179 0, -180 0, -180 1)))')
+    assert dst.difference(cmp).is_empty
 
 def test_split_polygon_to_geojson():
     poly: dict = json.loads(example_polygon1)
@@ -29,9 +34,9 @@ def test_split_polygon_to_geojson():
 
 def test_split_polygon_to_polygons():
     poly: dict = json.loads(example_polygon1)
-    res = split_polygon(poly, OutputFormat.GeometryCollection)
-    assert len(res) == 2
-    string_repr = str([str(poly) for poly in res])
+    res: GeometryCollection = split_polygon(poly, OutputFormat.GeometryCollection)
+    assert len(res.geoms) == 2
+    string_repr = str([str(poly) for poly in res.geoms])
     expect = """['POLYGON ((180 0, 179 0, 179 1, 180 1, 180 0))', 'POLYGON ((-180 1, -179 1, -179 0, -180 0, -180 1))']"""
     assert expect == string_repr
 
