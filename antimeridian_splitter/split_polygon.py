@@ -17,8 +17,12 @@ class AcceptedGeojsonTypes(Enum):
     MultiPolygon = 'MultiPolygon'
 
 
+def convert(l):
+    return list(convert(x) for x in l) if type(l) is tuple else l
+
 def split_coords(src_coords: List[List[List[float]]]) -> GeometryCollection:
-    coords_shift = copy.deepcopy(src_coords)
+    coords_shift = convert(copy.deepcopy(src_coords))
+    # print(coords_shift)
     shell_minx = sys.float_info.max
     shell_maxx = sys.float_info.min
 
@@ -115,19 +119,10 @@ def split_polygon(geojson: dict, output_format: OutputFormat = OutputFormat.Geoj
     """
     geotype = AcceptedGeojsonTypes(geojson['type'])
     if geotype is AcceptedGeojsonTypes.Polygon:
-<<<<<<< HEAD
         split_polygons = [split_coords(geojson['coordinates'])]
     elif geotype is AcceptedGeojsonTypes.MultiPolygon:
-        split_polygons = (split_coords(coords) for coords in geojson['coordinates'])
-        
-    gc = reduce(GeometryCollection.union, split_polygons, GeometryCollection())
+        split_polygons = [split_coords(coords) for coords in geojson['coordinates']]
+
+    # gc = reduce(GeometryCollection.union, split_polygons, GeometryCollection())
+    gc = GeometryCollection(split_polygons)
     return translate_polygons(gc, output_format)
-=======
-        split_polygons = split_coords(geojson['coordinates'])
-    elif geotype is AcceptedGeojsonTypes.MultiPolygon:
-        split_polygons = reduce(
-            GeometryCollection.union,
-            (split_coords(coords) for coords in geojson['coordinates'])
-        )
-    return translate_polygons(split_polygons, output_format)
->>>>>>> upstream/main
