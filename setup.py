@@ -15,7 +15,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     platforms='Platform Independent',
     install_requires=[
-        'shapely~=2.0.0'
+        'shapely~=2.0.0',
+        'coverage'
     ],
     classifiers=[
     ],
