@@ -9,7 +9,7 @@ from shapely.geometry import GeometryCollection, LineString, Polygon
 from shapely.ops import split
 
 # https://gist.github.com/PawaritL/ec7136c0b718ca65db6df1c33fd1bb11
-from .geopolygon_utils import check_crossing, translate_polygons, OutputFormat
+from antimeridian_splitter.geopolygon_utils import check_crossing, translate_polygons, OutputFormat
 
 
 class AcceptedGeojsonTypes(Enum):
