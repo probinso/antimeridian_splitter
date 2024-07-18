@@ -1,5 +1,5 @@
-from .split_polygon import split_polygon
-from .geopolygon_utils import OutputFormat
+from antimeridian_splitter.split_polygon import split_polygon
+from antimeridian_splitter.geopolygon_utils import OutputFormat
 import json
 from functools import reduce
 from shapely.geometry.base import BaseGeometry
