@@ -123,6 +123,5 @@ def split_polygon(geojson: dict, output_format: OutputFormat = OutputFormat.Geoj
     elif geotype is AcceptedGeojsonTypes.MultiPolygon:
         split_polygons = [split_coords(coords) for coords in geojson['coordinates']]
 
-    gc = reduce(GeometryCollection.union, split_polygons, GeometryCollection())
-    # gc = GeometryCollection(split_polygons)
+    gc = GeometryCollection(split_polygons)
     return translate_polygons(gc, output_format)
